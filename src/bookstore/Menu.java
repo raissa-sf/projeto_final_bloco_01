@@ -1,5 +1,6 @@
 package bookstore;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import bookstore.controller.BookController;
@@ -39,7 +40,14 @@ public class Menu {
 			System.out.println("Choose an option:                                    ");
 			System.out.println("                                                     " + Colors.TEXT_RESET);
 
-			option = scanner.nextInt();
+			try {
+				option = scanner.nextInt();
+				scanner.nextLine();
+			} catch (InputMismatchException e) {
+				System.err.println("\nError: Please enter an integer number!");
+				scanner.nextLine(); 
+				option = -1;
+			}
 
 			if (option == 0) {
 				System.out.println(Colors.TEXT_WHITE_BOLD + "\nGalaxy Bookstore - Your next adventure starts here!");
