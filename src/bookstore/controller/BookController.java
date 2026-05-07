@@ -1,6 +1,7 @@
 package bookstore.controller;
 
 import java.util.ArrayList;
+
 import bookstore.model.Book;
 import bookstore.repository.BookRepository;
 import bookstore.util.Colors;
@@ -26,11 +27,10 @@ public class BookController implements BookRepository {
         if (bookList.isEmpty()) {
             System.out.println(Colors.TEXT_RED_BOLD + "\nThe bookstore is empty!" + Colors.TEXT_RESET);
         } else {
-            for (var book : bookList) {
-                book.view();
+        	bookList.forEach(book -> book.view());
             }
         }
-    }
+    
 
     @Override
     public void register(Book book) {
@@ -64,12 +64,10 @@ public class BookController implements BookRepository {
     }
 
     public Book findInCollection(int id) {
-        for (var book : bookList) {
-            if (book.getId() == id) {
-                return book;
-            }
-        }
-        return null;
+        return bookList.stream()
+        		.filter(book -> book.getId() == id)
+        		.findFirst()
+        		.orElse(null);
     }
     
     public int generateId() {
