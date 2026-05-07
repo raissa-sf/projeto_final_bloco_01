@@ -71,6 +71,7 @@ public class Menu {
 				break;
 			case 5:
 				System.out.println(Colors.TEXT_WHITE + "Delete Book\n\n");
+				deleteBook();
 				keyPress();
 				break;
 			default:
@@ -156,6 +157,21 @@ public class Menu {
             }
         } else {
             System.out.println(Colors.TEXT_RED + "Book not found!");
+        }
+    }
+	
+	public static void deleteBook() {
+        System.out.print("Enter the Book ID to delete: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Are you sure? (Y/N): ");
+        String confirm = scanner.nextLine();
+
+        if (confirm.equalsIgnoreCase("Y")) {
+            bookController.delete(id);
+        } else {
+            System.out.println("Operation canceled.");
         }
     }
 	
