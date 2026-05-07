@@ -60,6 +60,7 @@ public class Menu {
 				break;
 			case 3:
 				System.out.println(Colors.TEXT_WHITE + "Search Book by ID\n\n");
+				searchBook();
 				keyPress();
 				break;
 			case 4:
@@ -113,6 +114,12 @@ public class Menu {
 	public static void listAllBooks() {
 	    bookController.listAll(); 
 	}
+	
+	public static void searchBook() {
+        System.out.print("Enter the Book ID: ");
+        int id = scanner.nextInt();
+        bookController.searchById(id);
+    }
 	
 	public static void testData() {
 		bookController.register(new PhysicalBook(bookController.generateId(), 1, "The Hobbit", "J.R.R. Tolkien", 45.0f, "Hardcover"));
