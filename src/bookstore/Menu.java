@@ -92,44 +92,55 @@ public class Menu {
 	}
 
 	public static void addBook() {
-		System.out.print("Book Title: ");
-		String title = scanner.nextLine();
+	    System.out.print("Book Title: ");
+	    String title = scanner.nextLine();
 
-		System.out.print("Author: ");
-		String author = scanner.nextLine();
+	    System.out.print("Author: ");
+	    String author = scanner.nextLine();
 
-		System.out.print("Price: ");
-		float price = scanner.nextFloat();
+	    float price = 0;
+	    while (true) {
+	        try {
+	            System.out.print("Price: ");
+	            price = scanner.nextFloat();
+	            if (price >= 0) break;
+	            System.out.println(Colors.TEXT_RED + "Price cannot be negative!");
+	        } catch (InputMismatchException e) {
+	            System.out.println(Colors.TEXT_RED + "Invalid input! Please enter a numeric value for price (e.g., 49,90).");
+	            scanner.nextLine();
+	        }
+	    }
 
-		System.out.print("Type (1-Physical | 2-Ebook): ");
-		int type = scanner.nextInt();
-		scanner.nextLine();
+	    int type = 0;
+	    while (true) {
+	        try {
+	            System.out.print("Type (1-Physical | 2-Ebook): ");
+	            type = scanner.nextInt();
+	            scanner.nextLine(); 
+	            if (type == 1 || type == 2) break;
+	            System.out.println(Colors.TEXT_RED + "Please, choose 1 or 2.");
+	        } catch (InputMismatchException e) {
+	            System.out.println(Colors.TEXT_RED + "Invalid input! Enter a number (1 or 2).");
+	            scanner.nextLine(); 
+	        }
+	    }
 
-		int id = bookController.generateId();
-		boolean registered = true;
+	    int id = bookController.generateId();
 
-		switch (type) {
-		case 1 -> {
-			System.out.print("Cover Type (Hardcover/Paperback): ");
-			String cover = scanner.nextLine();
-			bookController.register(new PhysicalBook(id, type, title, author, price, cover));
-		}
-		case 2 -> {
-			System.out.print("Format (PDF/EPUB/MOBI): ");
-			String format = scanner.nextLine();
-			bookController.register(new Ebook(id, type, title, author, price, format));
-		}
-		default -> {
-			System.out.println(Colors.TEXT_RED + "Invalid book type!");
-			registered = false;
-		}
-		}
+	    switch (type) {
+	        case 1 -> {
+	            System.out.print("Cover Type (Hardcover/Paperback): ");
+	            String cover = scanner.nextLine();
+	            bookController.register(new PhysicalBook(id, type, title, author, price, cover));
+	        }
+	        case 2 -> {
+	            System.out.print("Format (PDF/EPUB/MOBI): ");
+	            String format = scanner.nextLine();
+	            bookController.register(new Ebook(id, type, title, author, price, format));
+	        }
+	    }
 
-		if (registered) {
-			System.out.printf(
-					Colors.TEXT_GREEN_BOLD + "\nBook '%s' (ID: %d) was successfully registered!%n" + Colors.TEXT_RESET,
-					title, id);
-		}
+	    System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook '%s' (ID: %d) was successfully registered!%n" + Colors.TEXT_RESET, title, id);
 	}
 
 	public static void listAllBooks() {
