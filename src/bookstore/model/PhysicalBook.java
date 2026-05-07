@@ -13,6 +13,7 @@ public class PhysicalBook extends Book{
 	public void view() {
 		super.view();
 		System.out.println("Cover Type: " + this.coverType);
+		System.err.println( "***********************************************************\n");
 	}
 
 	public String getCoverType() {

@@ -1,14 +1,13 @@
 package bookstore;
 
 import java.util.InputMismatchException;
-import java.util.Optional;
 import java.util.Scanner;
 
 import bookstore.controller.BookController;
-import bookstore.model.Book;
 import bookstore.model.Ebook;
 import bookstore.model.PhysicalBook;
 import bookstore.util.Colors;
+import bookstore.util.DatabaseMock;
 
 public class Menu {
 
@@ -17,13 +16,13 @@ public class Menu {
     
 	public static void main(String[] args) {
 
-		testData();
+		DatabaseMock.fill(bookController);
 		
 		int option;
 
 		while (true) {
 
-			System.out.println(Colors.TEXT_YELLOW + Colors.ANSI_BLACK_BACKGROUND
+			System.out.println(Colors.TEXT_CYAN_BOLD
 					+ "*****************************************************");
 			System.out.println("                                                     ");
 			System.out.println("                GALAXY BOOKSTORE                     ");
@@ -51,7 +50,7 @@ public class Menu {
 			}
 
 			if (option == 0) {
-				System.out.println(Colors.TEXT_WHITE_BOLD + "\nGalaxy Bookstore - Your next adventure starts here!");
+				System.out.println(Colors.TEXT_BLACK_BOLD + "\nGalaxy Bookstore - Your next adventure starts here!");
 				about();
 				scanner.close();
 				System.exit(0);
@@ -59,32 +58,32 @@ public class Menu {
 
 			switch (option) {
 			case 1:
-				System.out.println(Colors.TEXT_WHITE + "Add New Book\n\n");
+				System.out.println(Colors.TEXT_BLACK + "Add New Book\n\n");
 				addBook();
 				keyPress();
 				break;
 			case 2:
-				System.out.println(Colors.TEXT_WHITE + "List All Books\n\n");
+				System.out.println(Colors.TEXT_BLACK + "List All Books\n\n");
 				listAllBooks();
 				keyPress();
 				break;
 			case 3:
-				System.out.println(Colors.TEXT_WHITE + "Search Book by ID\n\n");
+				System.out.println(Colors.TEXT_BLACK + "Search Book by ID\n\n");
 				searchBook();
 				keyPress();
 				break;
 			case 4:
-				System.out.println(Colors.TEXT_WHITE + "Update Book Data\n\n");
+				System.out.println(Colors.TEXT_BLACK + "Update Book Data\n\n");
 				updateBook();
 				keyPress();
 				break;
 			case 5:
-				System.out.println(Colors.TEXT_WHITE + "Delete Book\n\n");
+				System.out.println(Colors.TEXT_BLACK + "Delete Book\n\n");
 				deleteBook();
 				keyPress();
 				break;
 			default:
-				System.out.println(Colors.TEXT_RED_BOLD + "\nInvalid Option!\n" + Colors.TEXT_RESET);
+				System.err.println("\nInvalid Option!\n");
 				keyPress();
 				break;
 			}
@@ -107,6 +106,7 @@ public class Menu {
 		scanner.nextLine();
 
 		int id = bookController.generateId();
+		boolean registered = true;
 
 		switch (type) {
 		case 1 -> {
@@ -121,6 +121,10 @@ public class Menu {
 		}
 		default -> System.out.println(Colors.TEXT_RED + "Invalid book type!");
 		}
+		
+		if (registered) {
+			System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID %d was successfully registered!%n" +  Colors.TEXT_RESET, title, id);
+		}
 	}
 	
 	public static void listAllBooks() {
@@ -130,6 +134,7 @@ public class Menu {
 	public static void searchBook() {
         System.out.print("Enter the Book ID: ");
         int id = scanner.nextInt();
+        scanner.nextLine(); 
         bookController.searchById(id);
     }
 	
@@ -183,12 +188,6 @@ public class Menu {
 	        },
 	        () -> System.out.println(Colors.TEXT_RED + "Book not found!")
 	    );
-	}
-	
-	public static void testData() {
-		bookController.register(new PhysicalBook(bookController.generateId(), 1, "The Hobbit", "J.R.R. Tolkien", 45.0f, "Hardcover"));
-        bookController.register(new Ebook(bookController.generateId(), 2, "Clean Code", "Robert Martin", 89.9f, "PDF"));
-        bookController.register(new PhysicalBook(bookController.generateId(), 1, "1984", "George Orwell", 35.0f, "Paperback"));
 	}
 
 	public static void about() {

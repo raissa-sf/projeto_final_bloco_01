@@ -60,24 +60,16 @@ public abstract class Book {
 
     public void view() {
 
-        String typeName = "";
+        String typeName = (this.type == 1) ? "Physical Book" : "E-book";
 
-        switch (this.type) {
-            case 1:
-                typeName = "Physical Book";
-                break;
-            case 2:
-                typeName = "Ebook";
-                break;
-        }
-
-        System.out.println("\n\n" + Colors.TEXT_RED + "***********************************************************" + Colors.TEXT_RESET);
-        System.out.println("Book Details:");
-        System.out.println(Colors.TEXT_RED + "***********************************************************" + Colors.TEXT_RESET);
-        System.out.println("ID: " + this.id);
-        System.out.println("Type: " + typeName);
-        System.out.println("Title: " + this.title);
-        System.out.println("Author: " + this.author);
-        System.out.printf("Price: $ %.2f%n", this.price);
+        System.err.println("\n***********************************************************");
+        System.out.println(Colors.TEXT_BLACK_BOLD + "Book Details:");
+        System.err.println("***********************************************************");
+        System.out.printf("%-10s: %d\n", "ID", this.id);
+        System.out.printf("%-10s: %s\n", "Type", typeName);
+        System.out.printf("%-10s: %s\n", "Title", this.title);
+        System.out.printf("%-10s: %s\n", "Author", this.author);
+        System.out.printf("%-10s: $ %.2f\n", "Price", this.price);
+        
     }
 }

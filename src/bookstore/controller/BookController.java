@@ -33,7 +33,6 @@ public class BookController implements BookRepository {
     @Override
     public void register(Book book) {
         bookList.add(book);
-        System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID %d was successfully registered!%n" + Colors.TEXT_RESET, book.getId());
     }
 
     @Override

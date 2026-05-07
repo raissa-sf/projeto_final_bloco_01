@@ -13,6 +13,7 @@ public class Ebook extends Book {
 	public void view() {
 		super.view();
 		System.out.println("Format: " + this.format);
+		System.err.println( "***********************************************************\n");
 	}
 
 	public String getFormat() {
