@@ -1,6 +1,7 @@
 package bookstore;
 
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 import bookstore.controller.BookController;
@@ -133,55 +134,56 @@ public class Menu {
     }
 	
 	public static void updateBook() {
-        System.out.print("Enter the Book ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+	    System.out.print("Enter the Book ID to update: ");
+	    int id = scanner.nextInt();
+	    scanner.nextLine();
 
-        Book book = bookController.findInCollection(id);
+	    bookController.findInCollection(id).ifPresentOrElse(book -> {
+	        System.out.print("New Title (Current: " + book.getTitle() + "): ");
+	        String title = scanner.nextLine();
+	        if (title.isEmpty()) title = book.getTitle();
 
-        if (book != null) {
-            System.out.print("New Title (Current: " + book.getTitle() + "): ");
-            String title = scanner.nextLine();
-            if(title.isEmpty()) title = book.getTitle();
+	        System.out.print("New Author (Current: " + book.getAuthor() + "): ");
+	        String author = scanner.nextLine();
+	        if (author.isEmpty()) author = book.getAuthor();
 
-            System.out.print("New Author (Current: " + book.getAuthor() + "): ");
-            String author = scanner.nextLine();
-            if(author.isEmpty()) author = book.getAuthor();
+	        System.out.print("New Price (Current: " + book.getPrice() + "): ");
+	        float price = scanner.nextFloat();
+	        scanner.nextLine();
 
-            System.out.print("New Price (Current: " + book.getPrice() + "): ");
-            float price = scanner.nextFloat();
-            scanner.nextLine();
+	        int type = book.getType();
 
-            int type = book.getType();
-
-            if (type == 1) {
-                System.out.print("New Cover Type: ");
-                String cover = scanner.nextLine();
-                bookController.update(new PhysicalBook(id, type, title, author, price, cover));
-            } else {
-                System.out.print("New Format: ");
-                String format = scanner.nextLine();
-                bookController.update(new Ebook(id, type, title, author, price, format));
-            }
-        } else {
-            System.out.println(Colors.TEXT_RED + "Book not found!");
-        }
-    }
+	        if (type == 1) {
+	            System.out.print("New Cover Type: ");
+	            String cover = scanner.nextLine();
+	            bookController.update(new PhysicalBook(id, type, title, author, price, cover));
+	        } else {
+	            System.out.print("New Format: ");
+	            String format = scanner.nextLine();
+	            bookController.update(new Ebook(id, type, title, author, price, format));
+	        }
+	    }, () -> {
+	        System.out.println(Colors.TEXT_RED + "Book not found!");
+	    });
+	}
 	
 	public static void deleteBook() {
-        System.out.print("Enter the Book ID to delete: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+	    System.out.print("Enter the Book ID: ");
+	    int id = scanner.nextInt();
+	    scanner.nextLine();
 
-        System.out.print("Are you sure? (Y/N): ");
-        String confirm = scanner.nextLine();
-
-        if (confirm.equalsIgnoreCase("Y")) {
-            bookController.delete(id);
-        } else {
-            System.out.println("Operation canceled.");
-        }
-    }
+	    bookController.findInCollection(id).ifPresentOrElse(
+	        book -> {
+	            System.out.print("Are you sure you want to delete '" + book.getTitle() + "'? (Y/N): ");
+	            if (scanner.nextLine().equalsIgnoreCase("Y")) {
+	                bookController.delete(id);
+	            }else {
+	                System.out.println(Colors.TEXT_YELLOW + "\nOperation canceled. The book was not deleted.");
+	            }
+	        },
+	        () -> System.out.println(Colors.TEXT_RED + "Book not found!")
+	    );
+	}
 	
 	public static void testData() {
 		bookController.register(new PhysicalBook(bookController.generateId(), 1, "The Hobbit", "J.R.R. Tolkien", 45.0f, "Hardcover"));

@@ -1,6 +1,7 @@
 package bookstore.controller;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import bookstore.model.Book;
 import bookstore.repository.BookRepository;
@@ -13,13 +14,10 @@ public class BookController implements BookRepository {
 
     @Override
     public void searchById(int id) {
-        var book = findInCollection(id);
-
-        if (book != null) {
-            book.view();
-        } else {
-            System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found!%n" + Colors.TEXT_RESET, id);
-        }
+        findInCollection(id).ifPresentOrElse(
+            book -> book.view(),
+            () -> System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found!%n" + Colors.TEXT_RESET, id)
+        );
     }
 
     @Override
@@ -40,34 +38,30 @@ public class BookController implements BookRepository {
 
     @Override
     public void update(Book book) {
-        var searchBook = findInCollection(book.getId());
-
-        if (searchBook != null) {
-            bookList.set(bookList.indexOf(searchBook), book);
-            System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID: %d was successfully updated!%n" + Colors.TEXT_RESET, book.getId());
-        } else {
-            System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found for update!%n" + Colors.TEXT_RESET, book.getId());
-        }
+        findInCollection(book.getId()).ifPresentOrElse(
+            searchBook -> {
+                bookList.set(bookList.indexOf(searchBook), book);
+                System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID: %d was successfully updated!%n" + Colors.TEXT_RESET, book.getId());
+            },
+            () -> System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found for update!%n" + Colors.TEXT_RESET, book.getId())
+        );
     }
 
     @Override
     public void delete(int id) {
-        var book = findInCollection(id);
-
-        if (book != null) {
-            if (bookList.remove(book)) {
+        findInCollection(id).ifPresentOrElse(
+            book -> {
+                bookList.remove(book);
                 System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID: %d was successfully deleted!%n" + Colors.TEXT_RESET, id);
-            }
-        } else {
-            System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found for deletion!%n" + Colors.TEXT_RESET, id);
-        }
+            },
+            () -> System.out.printf(Colors.TEXT_RED_BOLD + "\nBook ID: %d was not found for deletion!%n" + Colors.TEXT_RESET, id)
+        );
     }
 
-    public Book findInCollection(int id) {
+    public Optional<Book> findInCollection(int id) {
         return bookList.stream()
-        		.filter(book -> book.getId() == id)
-        		.findFirst()
-        		.orElse(null);
+                .filter(book -> book.getId() == id)
+                .findFirst(); 
     }
     
     public int generateId() {
