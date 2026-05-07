@@ -14,6 +14,8 @@ public class Menu {
     
 	public static void main(String[] args) {
 
+		testData();
+		
 		int option;
 
 		while (true) {
@@ -53,6 +55,7 @@ public class Menu {
 				break;
 			case 2:
 				System.out.println(Colors.TEXT_WHITE + "List All Books\n\n");
+				listAllBooks();
 				keyPress();
 				break;
 			case 3:
@@ -105,6 +108,16 @@ public class Menu {
 		}
 		default -> System.out.println(Colors.TEXT_RED + "Invalid book type!");
 		}
+	}
+	
+	public static void listAllBooks() {
+	    bookController.listAll(); 
+	}
+	
+	public static void testData() {
+		bookController.register(new PhysicalBook(bookController.generateId(), 1, "The Hobbit", "J.R.R. Tolkien", 45.0f, "Hardcover"));
+        bookController.register(new Ebook(bookController.generateId(), 2, "Clean Code", "Robert Martin", 89.9f, "PDF"));
+        bookController.register(new PhysicalBook(bookController.generateId(), 1, "1984", "George Orwell", 35.0f, "Paperback"));
 	}
 
 	public static void about() {
