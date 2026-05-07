@@ -3,6 +3,7 @@ package bookstore;
 import java.util.Scanner;
 
 import bookstore.controller.BookController;
+import bookstore.model.Book;
 import bookstore.model.Ebook;
 import bookstore.model.PhysicalBook;
 import bookstore.util.Colors;
@@ -65,6 +66,7 @@ public class Menu {
 				break;
 			case 4:
 				System.out.println(Colors.TEXT_WHITE + "Update Book Data\n\n");
+				updateBook();
 				keyPress();
 				break;
 			case 5:
@@ -119,6 +121,42 @@ public class Menu {
         System.out.print("Enter the Book ID: ");
         int id = scanner.nextInt();
         bookController.searchById(id);
+    }
+	
+	public static void updateBook() {
+        System.out.print("Enter the Book ID to update: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Book book = bookController.findInCollection(id);
+
+        if (book != null) {
+            System.out.print("New Title (Current: " + book.getTitle() + "): ");
+            String title = scanner.nextLine();
+            if(title.isEmpty()) title = book.getTitle();
+
+            System.out.print("New Author (Current: " + book.getAuthor() + "): ");
+            String author = scanner.nextLine();
+            if(author.isEmpty()) author = book.getAuthor();
+
+            System.out.print("New Price (Current: " + book.getPrice() + "): ");
+            float price = scanner.nextFloat();
+            scanner.nextLine();
+
+            int type = book.getType();
+
+            if (type == 1) {
+                System.out.print("New Cover Type: ");
+                String cover = scanner.nextLine();
+                bookController.update(new PhysicalBook(id, type, title, author, price, cover));
+            } else {
+                System.out.print("New Format: ");
+                String format = scanner.nextLine();
+                bookController.update(new Ebook(id, type, title, author, price, format));
+            }
+        } else {
+            System.out.println(Colors.TEXT_RED + "Book not found!");
+        }
     }
 	
 	public static void testData() {
