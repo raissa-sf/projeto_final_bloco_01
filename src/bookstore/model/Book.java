@@ -62,14 +62,14 @@ public abstract class Book {
 
         String typeName = (this.type == 1) ? "Physical Book" : "E-book";
 
-        System.err.println("\n***********************************************************");
-        System.out.println(Colors.TEXT_BLACK_BOLD + "Book Details:");
-        System.err.println("***********************************************************");
-        System.out.printf("%-10s: %d\n", "ID", this.id);
-        System.out.printf("%-10s: %s\n", "Type", typeName);
-        System.out.printf("%-10s: %s\n", "Title", this.title);
-        System.out.printf("%-10s: %s\n", "Author", this.author);
-        System.out.printf("%-10s: $ %.2f\n", "Price", this.price);
+        System.out.println(Colors.TEXT_CYAN_BOLD +"\n***********************************************************");
+        System.out.println(Colors.TEXT_CYAN_BOLD + "Book Details:");
+        System.err.println(Colors.TEXT_CYAN_BOLD +"***********************************************************");
+        System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:" + Colors.TEXT_YELLOW + "%d\n", "ID", this.id);
+        System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:"  + Colors.TEXT_YELLOW + "%s\n", "Type", typeName);
+        System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:"  + Colors.TEXT_YELLOW + "%s\n", "Title", this.title);
+        System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:"  + Colors.TEXT_YELLOW + "%s\n", "Author", this.author);
+        System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:"  + Colors.TEXT_YELLOW + "$ %.2f\n", "Price", this.price);
         
     }
 }

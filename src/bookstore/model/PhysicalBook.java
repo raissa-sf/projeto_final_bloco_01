@@ -1,5 +1,7 @@
 package bookstore.model;
 
+import bookstore.util.Colors;
+
 public class PhysicalBook extends Book{
 	
 	private String coverType;
@@ -12,8 +14,8 @@ public class PhysicalBook extends Book{
 	@Override
 	public void view() {
 		super.view();
-		System.out.println("Cover Type: " + this.coverType);
-		System.err.println( "***********************************************************\n");
+		System.out.printf(Colors.TEXT_WHITE_BOLD + "%-10s:" + Colors.TEXT_YELLOW + " %s\n", "Cover", this.coverType);
+		System.out.println( Colors.TEXT_CYAN_BOLD + "***********************************************************\n" + Colors.TEXT_RESET);
 	}
 
 	public String getCoverType() {

@@ -12,18 +12,17 @@ import bookstore.util.DatabaseMock;
 public class Menu {
 
 	private static final Scanner scanner = new Scanner(System.in);
-    private static final BookController bookController = new BookController();
-    
+	private static final BookController bookController = new BookController();
+
 	public static void main(String[] args) {
 
 		DatabaseMock.fill(bookController);
-		
+
 		int option;
 
 		while (true) {
 
-			System.out.println(Colors.TEXT_CYAN_BOLD
-					+ "*****************************************************");
+			System.out.println(Colors.TEXT_CYAN_BOLD + "*****************************************************");
 			System.out.println("                                                     ");
 			System.out.println("                GALAXY BOOKSTORE                     ");
 			System.out.println("                                                     ");
@@ -45,45 +44,46 @@ public class Menu {
 				scanner.nextLine();
 			} catch (InputMismatchException e) {
 				System.err.println("\nError: Please enter an integer number!");
-				scanner.nextLine(); 
+				scanner.nextLine();
 				option = -1;
 			}
 
 			if (option == 0) {
-				System.out.println(Colors.TEXT_BLACK_BOLD + "\nGalaxy Bookstore - Your next adventure starts here!");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "\nGalaxy Bookstore - Your next adventure starts here!");
 				about();
+				System.out.println(Colors.TEXT_RESET + "Closing system...");
 				scanner.close();
 				System.exit(0);
 			}
 
 			switch (option) {
 			case 1:
-				System.out.println(Colors.TEXT_BLACK + "Add New Book\n\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "Add New Book\n\n");
 				addBook();
 				keyPress();
 				break;
 			case 2:
-				System.out.println(Colors.TEXT_BLACK + "List All Books\n\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "List All Books\n\n");
 				listAllBooks();
 				keyPress();
 				break;
 			case 3:
-				System.out.println(Colors.TEXT_BLACK + "Search Book by ID\n\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "Search Book by ID\n\n");
 				searchBook();
 				keyPress();
 				break;
 			case 4:
-				System.out.println(Colors.TEXT_BLACK + "Update Book Data\n\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "Update Book Data\n\n");
 				updateBook();
 				keyPress();
 				break;
 			case 5:
-				System.out.println(Colors.TEXT_BLACK + "Delete Book\n\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "Delete Book\n\n");
 				deleteBook();
 				keyPress();
 				break;
 			default:
-				System.err.println("\nInvalid Option!\n");
+				System.out.println(Colors.TEXT_CYAN_BOLD + "\nInvalid Option!\n");
 				keyPress();
 				break;
 			}
@@ -119,84 +119,88 @@ public class Menu {
 			String format = scanner.nextLine();
 			bookController.register(new Ebook(id, type, title, author, price, format));
 		}
-		default -> System.out.println(Colors.TEXT_RED + "Invalid book type!");
+		default -> {
+			System.out.println(Colors.TEXT_RED + "Invalid book type!");
+			registered = false;
 		}
-		
+		}
+
 		if (registered) {
-			System.out.printf(Colors.TEXT_GREEN_BOLD + "\nBook ID %d was successfully registered!%n" +  Colors.TEXT_RESET, title, id);
+			System.out.printf(
+					Colors.TEXT_GREEN_BOLD + "\nBook '%s' (ID: %d) was successfully registered!%n" + Colors.TEXT_RESET,
+					title, id);
 		}
 	}
-	
+
 	public static void listAllBooks() {
-	    bookController.listAll(); 
+		bookController.listAll();
 	}
-	
+
 	public static void searchBook() {
-        System.out.print("Enter the Book ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); 
-        bookController.searchById(id);
-    }
-	
-	public static void updateBook() {
-	    System.out.print("Enter the Book ID to update: ");
-	    int id = scanner.nextInt();
-	    scanner.nextLine();
-
-	    bookController.findInCollection(id).ifPresentOrElse(book -> {
-	        System.out.print("New Title (Current: " + book.getTitle() + "): ");
-	        String title = scanner.nextLine();
-	        if (title.isEmpty()) title = book.getTitle();
-
-	        System.out.print("New Author (Current: " + book.getAuthor() + "): ");
-	        String author = scanner.nextLine();
-	        if (author.isEmpty()) author = book.getAuthor();
-
-	        System.out.print("New Price (Current: " + book.getPrice() + "): ");
-	        float price = scanner.nextFloat();
-	        scanner.nextLine();
-
-	        int type = book.getType();
-
-	        if (type == 1) {
-	            System.out.print("New Cover Type: ");
-	            String cover = scanner.nextLine();
-	            bookController.update(new PhysicalBook(id, type, title, author, price, cover));
-	        } else {
-	            System.out.print("New Format: ");
-	            String format = scanner.nextLine();
-	            bookController.update(new Ebook(id, type, title, author, price, format));
-	        }
-	    }, () -> {
-	        System.out.println(Colors.TEXT_RED + "Book not found!");
-	    });
+		System.out.print("Enter the Book ID: ");
+		int id = scanner.nextInt();
+		scanner.nextLine();
+		bookController.searchById(id);
 	}
-	
-	public static void deleteBook() {
-	    System.out.print("Enter the Book ID: ");
-	    int id = scanner.nextInt();
-	    scanner.nextLine();
 
-	    bookController.findInCollection(id).ifPresentOrElse(
-	        book -> {
-	            System.out.print("Are you sure you want to delete '" + book.getTitle() + "'? (Y/N): ");
-	            if (scanner.nextLine().equalsIgnoreCase("Y")) {
-	                bookController.delete(id);
-	            }else {
-	                System.out.println(Colors.TEXT_YELLOW + "\nOperation canceled. The book was not deleted.");
-	            }
-	        },
-	        () -> System.out.println(Colors.TEXT_RED + "Book not found!")
-	    );
+	public static void updateBook() {
+		System.out.print("Enter the Book ID to update: ");
+		int id = scanner.nextInt();
+		scanner.nextLine();
+
+		bookController.findInCollection(id).ifPresentOrElse(book -> {
+			System.out.print("New Title (Current: " + book.getTitle() + "): ");
+			String title = scanner.nextLine();
+			if (title.isEmpty())
+				title = book.getTitle();
+
+			System.out.print("New Author (Current: " + book.getAuthor() + "): ");
+			String author = scanner.nextLine();
+			if (author.isEmpty())
+				author = book.getAuthor();
+
+			System.out.print("New Price (Current: " + book.getPrice() + "): ");
+			float price = scanner.nextFloat();
+			scanner.nextLine();
+
+			int type = book.getType();
+
+			if (type == 1) {
+				System.out.print("New Cover Type: ");
+				String cover = scanner.nextLine();
+				bookController.update(new PhysicalBook(id, type, title, author, price, cover));
+			} else {
+				System.out.print("New Format: ");
+				String format = scanner.nextLine();
+				bookController.update(new Ebook(id, type, title, author, price, format));
+			}
+		}, () -> {
+			System.out.println(Colors.TEXT_RED + "Book not found!");
+		});
+	}
+
+	public static void deleteBook() {
+		System.out.print("Enter the Book ID: ");
+		int id = scanner.nextInt();
+		scanner.nextLine();
+
+		bookController.findInCollection(id).ifPresentOrElse(book -> {
+			System.out.print("Are you sure you want to delete '" + book.getTitle() + "'? (Y/N): ");
+			if (scanner.nextLine().equalsIgnoreCase("Y")) {
+				bookController.delete(id);
+			} else {
+				System.out.println(Colors.TEXT_YELLOW + "\nOperation canceled. The book was not deleted.");
+			}
+		}, () -> System.out.println(Colors.TEXT_RED + "Book not found!"));
 	}
 
 	public static void about() {
-		System.out.println("\n*********************************************************");
-		System.out.println("Project Developed by: ");
-		System.out.println("Raissa Santos Feitosa");
-		System.out.println("raissa.feitosa06@gmail.com");
-		System.out.println("github.com/raissa-sf");
-		System.out.println("*********************************************************");
+		System.out.println(Colors.TEXT_CYAN_BOLD + "\n*********************************************************");
+		System.out.println(Colors.TEXT_WHITE_BOLD + " Project Developed by: ");
+		System.out.println(Colors.TEXT_YELLOW + " Raissa Santos Feitosa");
+		System.out.println(Colors.TEXT_WHITE + " raissa.feitosa06@gmail.com");
+		System.out.println(Colors.TEXT_WHITE + " github.com/raissa-sf");
+		System.out.println(Colors.TEXT_CYAN_BOLD + "*********************************************************");
 	}
 
 	public static void keyPress() {

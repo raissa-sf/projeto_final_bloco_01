@@ -1,5 +1,7 @@
 package bookstore.model;
 
+import bookstore.util.Colors;
+
 public class Ebook extends Book {
 
 	private String format;
@@ -13,7 +15,7 @@ public class Ebook extends Book {
 	public void view() {
 		super.view();
 		System.out.println("Format: " + this.format);
-		System.err.println( "***********************************************************\n");
+		System.out.println( Colors.TEXT_CYAN_BOLD + "***********************************************************\n" + Colors.TEXT_RESET);
 	}
 
 	public String getFormat() {
