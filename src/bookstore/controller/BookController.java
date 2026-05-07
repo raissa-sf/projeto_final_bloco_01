@@ -7,6 +7,7 @@ import bookstore.util.Colors;
 
 public class BookController implements BookRepository {
 
+	private int id = 0;
     private ArrayList<Book> bookList = new ArrayList<Book>();
 
     @Override
@@ -69,5 +70,9 @@ public class BookController implements BookRepository {
             }
         }
         return null;
+    }
+    
+    public int generateId() {
+        return ++id;
     }
 }
